@@ -29,6 +29,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class AddEditContact extends AppCompatActivity {
 
     private ImageView profileIv;
@@ -91,7 +94,7 @@ public class AddEditContact extends AppCompatActivity {
 
         if (isEditMode) {
             // Titre de la barre d'outils pour la modification
-            actionBar.setTitle("Mettre à jour le contact");
+            actionBar.setTitle("Update the Contact");
 
             // Obtenir les autres valeurs de l'intention
             id = intent.getStringExtra("ID");
@@ -206,8 +209,16 @@ public class AddEditContact extends AppCompatActivity {
         email = emailEt.getText().toString();
         note = noteEt.getText().toString();
 
+        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        Pattern patternemail = Pattern.compile(emailPattern);
+        Matcher matcheremail = patternemail.matcher(email);
+
+        String phonePattern = "^[0-9]{10}$";
+        Pattern patternphone = Pattern.compile(phonePattern);
+        Matcher matcherphone = patternphone.matcher(phone);
+
         // Vérifier les données du champ
-        if (!name.isEmpty() && !phone.isEmpty() && !email.isEmpty() && !note.isEmpty()) {
+        if (!name.isEmpty() && !phone.isEmpty() && !email.isEmpty() && !note.isEmpty() && matcheremail.matches() && matcherphone.matches()) {
             // Sauvegarder les données si l'utilisateur n'a qu'une seule donnée
 
             // Vérifier le mode d'édition ou d'ajout pour enregistrer les données dans SQLite
@@ -222,7 +233,7 @@ public class AddEditContact extends AppCompatActivity {
                         "" + note
                 );
 
-                Toast.makeText(getApplicationContext(), "Mis à jour avec succès.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Updated successfully...", Toast.LENGTH_SHORT).show();
 
             } else {
                 // Mode ajout
@@ -234,14 +245,23 @@ public class AddEditContact extends AppCompatActivity {
                         "" + note
                 );
                 // Vérifier si l'insertion des données a réussi, afficher un message Toast
-                Toast.makeText(getApplicationContext(), "Inséré avec succès.... " + id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Inserted successfully... " + id, Toast.LENGTH_SHORT).show();
             }
 
-        } else {
-            // Afficher un message Toast
-            Toast.makeText(getApplicationContext(), "Rien à enregistrer....", Toast.LENGTH_SHORT).show();
         }
+        else if(name.isEmpty() || phone.isEmpty() || email.isEmpty() || note.isEmpty())
+            // Afficher un message Toast
+            Toast.makeText(getApplicationContext(), "empty inputs!", Toast.LENGTH_SHORT).show();
+        else if(!matcheremail.matches())
+            // Afficher un message Toast
+            Toast.makeText(getApplicationContext(), "the email is not valid", Toast.LENGTH_SHORT).show();
+        else if (!matcherphone.matches())
+            // Afficher un message Toast
+            Toast.makeText(getApplicationContext(), "the phone number is not valid", Toast.LENGTH_SHORT).show();
+
     }
+
+
 
     // Surcharge de la touche de retour
     @Override
