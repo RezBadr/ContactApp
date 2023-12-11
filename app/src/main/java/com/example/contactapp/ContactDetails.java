@@ -62,11 +62,11 @@ public class ContactDetails extends AppCompatActivity {
         if (cursor.moveToFirst()) {
             do {
                 // Obtenir les données
-                String name = "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME));
-                String image = "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE));
-                String phone = "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE));
-                String email = "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL));
-                String note = "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME));
+                String image = cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE));
+                String phone = cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE));
+                String email = cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL));
+                String note = cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE));
 
                 // Définir les données
                 nameTv.setText(name);

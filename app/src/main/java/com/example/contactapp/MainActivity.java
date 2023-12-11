@@ -71,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main_top_menu, menu);
-
         // Obtenir l'élément de recherche dans le menu
         MenuItem item = menu.findItem(R.id.searchContact);
         // Zone de recherche
@@ -81,13 +79,13 @@ public class MainActivity extends AppCompatActivity {
         // Définir la largeur maximale
         // ...
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchContact(query);
+            public boolean onQueryTextSubmit(String name) {
+                searchContact(name);
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchContact(newText);
@@ -98,17 +96,19 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void searchContact(String query) {
-        adapterContact = new AdapterContact(this, dbHelper.getSearchContact(query));
+    private void searchContact(String name) {
+        adapterContact = new AdapterContact(this,
+                dbHelper.getSearchContact(name));
         contactRv.setAdapter(adapterContact);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.deleteAllContact) {
+    public boolean onOptionsItemSelected
+            (@NonNull MenuItem item) {
+        if (item.getItemId() ==
+                R.id.deleteAllContact) {
             showDeleteConfirmationDialog();
         }
-
         return true;
     }
 

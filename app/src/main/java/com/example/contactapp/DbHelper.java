@@ -93,20 +93,18 @@ public class DbHelper extends SQLiteOpenHelper {
     public void deleteContact(String id){
         //get writable database
         SQLiteDatabase db =  getWritableDatabase();
-
         //delete query
         db.delete(Constants.TABLE_NAME,Constants.C_ID+" =? ",new String[]{id});
-
         db.close();
     }
 
     // delete all data
-    public void deleteAllContact(){
-        //get writable database
+    public void deleteAllContact() {
+        // Obtenez la base de données en mode écriture
         SQLiteDatabase db = getWritableDatabase();
-
-        //query for delete
-        db.execSQL("DELETE FROM "+Constants.TABLE_NAME);
+        // Utilisez la méthode delete avec une clause WHERE vide pour supprimer tous les enregistrements
+        db.delete(Constants.TABLE_NAME, null, null);
+        // Fermez la base de données
         db.close();
     }
 
@@ -127,12 +125,12 @@ public class DbHelper extends SQLiteOpenHelper {
             do {
                 ModelContact modelContact = new ModelContact(
                         // only id is integer type
-                        ""+cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE))
+                        String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID))),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE))
                 );
                 arrayList.add(modelContact);
             }while (cursor.moveToNext());
@@ -142,7 +140,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // search data in sql Database
-    public ArrayList<ModelContact> getSearchContact(String query){
+    public ArrayList<ModelContact> getSearchContact(String name){
 
         // it will return arraylist of modelContact class
         ArrayList<ModelContact> contactList = new ArrayList<>();
@@ -151,7 +149,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         //query for search
-        String queryToSearch = "SELECT * FROM "+Constants.TABLE_NAME+" WHERE "+Constants.C_NAME + " LIKE '%" +query+"%'";
+        String queryToSearch = "SELECT * FROM "+Constants.TABLE_NAME+" WHERE "+Constants.C_NAME + " LIKE '%" +name+"%'";
 
         Cursor cursor = db.rawQuery(queryToSearch,null);
 
@@ -160,12 +158,12 @@ public class DbHelper extends SQLiteOpenHelper {
             do {
                 ModelContact modelContact = new ModelContact(
                         // only id is integer type
-                        ""+cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE))
+                        String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID))),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE))
                 );
                 contactList.add(modelContact);
             }while (cursor.moveToNext());
